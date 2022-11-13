@@ -2,12 +2,12 @@ import 'package:demo_fx_project/model/candlestick.dart';
 import 'package:demo_fx_project/service/api_client.dart';
 
 class StockService {
-  final ApiClient apiClient;
+  final ApiClient _apiClient;
 
-  StockService(this.apiClient);
+  StockService(this._apiClient);
 
   Future<List<Candlestick>> getTimeSeries(String symbol) async {
-    final Map<String, dynamic> response = await apiClient.get(
+    final Map<String, dynamic> response = await _apiClient.get(
       'https://www.alphavantage.co/query',
       queryParameters: {
         'function': 'TIME_SERIES_INTRADAY',
@@ -18,7 +18,6 @@ class StockService {
     );
 
     final timeSeriesKey = response.keys.firstWhere((k) => k.startsWith('Time Series'));
-
     return _parseResponse(response[timeSeriesKey]);
   }
 

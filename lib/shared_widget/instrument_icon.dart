@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import '../model/Instrument.dart';
+import '../model/instrument.dart';
 
 class InstrumentIcon extends StatelessWidget {
   final Instrument instrument;

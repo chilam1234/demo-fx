@@ -1,8 +1,8 @@
 import 'package:demo_fx_project/shared_widget/gain_loss_view.dart';
 import 'package:flutter/material.dart';
 
-import 'package:demo_fx_project/model/Instrument.dart';
-import '../../shared_widget/instrument_icon.dart';
+import 'package:demo_fx_project/model/instrument.dart';
+import 'package:demo_fx_project/shared_widget/instrument_icon.dart';
 
 class TopInstrumentItem extends StatelessWidget {
   final Instrument instrument;

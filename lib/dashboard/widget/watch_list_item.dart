@@ -1,4 +1,4 @@
-import 'package:demo_fx_project/model/Instrument.dart';
+import 'package:demo_fx_project/model/instrument.dart';
 import 'package:demo_fx_project/shared_widget/gain_loss_view.dart';
 import 'package:demo_fx_project/shared_widget/instrument_icon.dart';
 import 'package:flutter/material.dart';
