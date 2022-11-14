@@ -1,24 +1,35 @@
 import 'package:demo_fx_project/model/candlestick.dart';
+import 'package:demo_fx_project/model/search_result.dart';
 import 'package:demo_fx_project/service/api_client.dart';
 
 class StockService {
+  static const String _apiKey = 'LUOH7PIRGSQ9BP3C';
+  static const String _serviceRoot = 'https://www.alphavantage.co';
   final ApiClient _apiClient;
 
   StockService(this._apiClient);
 
   Future<List<Candlestick>> getTimeSeries(String symbol) async {
     final Map<String, dynamic> response = await _apiClient.get(
-      'https://www.alphavantage.co/query',
+      '$_serviceRoot/query',
       queryParameters: {
         'function': 'TIME_SERIES_INTRADAY',
         'symbol': symbol,
         'interval': '5min',
-        'apikey': 'LUOH7PIRGSQ9BP3C'
+        'apikey': _apiKey
       },
     );
 
-    final timeSeriesKey = response.keys.firstWhere((k) => k.startsWith('Time Series'));
+    final timeSeriesKey =
+        response.keys.firstWhere((k) => k.startsWith('Time Series'));
     return _parseResponse(response[timeSeriesKey]);
+  }
+
+  Future<List<SearchResult>> search(String keyword) async {
+    final response = await _apiClient
+        .get('$_serviceRoot/query', queryParameters: {'keywords': keyword});
+    final result = response['bestMatches'] as List;
+    return result.map((i) => SearchResult.fromJson(i)).toList();
   }
 
   num _parseNumber(Map<String, dynamic> candlestickMap, String field) {
@@ -41,7 +52,14 @@ class StockService {
       final close = _parseNumber(candlestickMap, '4. close');
       final volume = _parseNumber(candlestickMap, '5. volume');
 
-      return Candlestick(time: time, open: open, high: high, low: low, close: close, volume: volume);
+      return Candlestick(
+        time: time,
+        open: open,
+        high: high,
+        low: low,
+        close: close,
+        volume: volume,
+      );
     });
 
     return result.toList();
