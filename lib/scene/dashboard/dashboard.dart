@@ -1,4 +1,4 @@
-import 'package:demo_fx_project/dashboard/dashboard_provider.dart';
+import 'dashboard_provider.dart';
 import 'package:demo_fx_project/service/api_client.dart';
 import 'package:demo_fx_project/service/stock_service.dart';
 import 'package:flutter/material.dart';

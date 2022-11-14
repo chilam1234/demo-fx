@@ -1,4 +1,4 @@
-import 'package:demo_fx_project/home/home.dart';
+import 'package:demo_fx_project/scene/home/home.dart';
 import 'package:demo_fx_project/service/api_client.dart';
 import 'package:demo_fx_project/util/theme_extension.dart';
 import 'package:flutter/material.dart';
