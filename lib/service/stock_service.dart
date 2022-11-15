@@ -26,8 +26,14 @@ class StockService {
   }
 
   Future<List<SearchResult>> search(String keyword) async {
-    final response = await _apiClient
-        .get('$_serviceRoot/query', queryParameters: {'keywords': keyword});
+    final response = await _apiClient.get(
+      '$_serviceRoot/query',
+      queryParameters: {
+        'function': 'SYMBOL_SEARCH',
+        'keywords': keyword,
+        'apikey': _apiKey,
+      },
+    );
     final result = response['bestMatches'] as List;
     return result.map((i) => SearchResult.fromJson(i)).toList();
   }

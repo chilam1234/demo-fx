@@ -22,7 +22,7 @@ class TopInstrumentItem extends StatelessWidget {
           child: Column(
             children: [
               InstrumentIcon(
-                instrument: instrument,
+                name: instrument.name,
                 size: 32,
               ),
               const SizedBox(height: 16),

@@ -1,5 +1,6 @@
+import 'package:go_router/go_router.dart';
+
 import 'dashboard_provider.dart';
-import 'package:demo_fx_project/service/api_client.dart';
 import 'package:demo_fx_project/service/stock_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,12 +11,15 @@ import 'widget/watch_list_item.dart';
 class Dashboard extends StatelessWidget {
   const Dashboard({Key? key}) : super(key: key);
 
+  void _navigateSearchScene(BuildContext context) {
+    GoRouter.of(context).push('/search');
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListenableProvider<DashboardProvider>(
       create: (context) {
-        final apiClient = context.read<ApiClient>();
-        final service = StockService(apiClient);
+        final service = context.read<StockService>();
         return DashboardProvider(service);
       },
       child: Scaffold(
@@ -24,7 +28,9 @@ class Dashboard extends StatelessWidget {
           centerTitle: false,
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                _navigateSearchScene(context);
+              },
               icon: const Icon(Icons.search),
             )
           ],
@@ -66,7 +72,8 @@ class _DashboardContentState extends State<_DashboardContent> {
 
   @override
   Widget build(BuildContext context) {
-    final headerTextStyle = Theme.of(context)
+    final headerTextStyle = Theme
+        .of(context)
         .textTheme
         .titleMedium
         ?.apply(fontWeightDelta: 4, fontSizeDelta: 2);

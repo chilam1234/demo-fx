@@ -21,7 +21,7 @@ class WatchListItem extends StatelessWidget {
         height: 64,
         child: ListTile(
           leading: InstrumentIcon(
-            instrument: instrument,
+            name: instrument.name,
             size: 32,
           ),
           title: Row(
