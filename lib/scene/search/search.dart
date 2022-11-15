@@ -1,6 +1,7 @@
 import 'package:demo_fx_project/model/search_result.dart';
 import 'package:demo_fx_project/scene/search/search_provider.dart';
 import 'package:demo_fx_project/service/stock_service.dart';
+import 'package:demo_fx_project/service/user_setting_service.dart';
 import 'package:demo_fx_project/shared_widget/instrument_icon.dart';
 import 'package:demo_fx_project/util/debouncer.dart';
 import 'package:flutter/material.dart';
@@ -114,14 +115,27 @@ class _SearchInstrumentListItem extends StatelessWidget {
                 ],
               ),
             ),
-            // const Spacer(),
-            ElevatedButton(
-              onPressed: () {},
-              child: const Text('Follow'),
-              style: const ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll(Colors.black),
-              ),
-            ),
+            Selector<UserSettingService, bool>(
+              builder: (context, isFollowing, child) {
+                return ElevatedButton(
+                  onPressed: () {
+                    final userSettingUserService = context.read<UserSettingService>();
+                    if (isFollowing) {
+                      userSettingUserService.unwatchInstrument(item.name);
+                    } else {
+                      userSettingUserService.watchInstrument(item.name);
+                    }
+                  },
+                  child: Text(isFollowing ? 'Unfollow' : 'Follow'),
+                  style: const ButtonStyle(
+                    backgroundColor: MaterialStatePropertyAll(Colors.black),
+                  ),
+                );
+              },
+              selector: (_, userSettingService) =>
+                  userSettingService.watchingInstrument.contains(item.name) ??
+                  false,
+            )
           ],
         ),
       ),

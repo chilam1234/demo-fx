@@ -2,6 +2,7 @@ import 'package:demo_fx_project/scene/home/home.dart';
 import 'package:demo_fx_project/scene/search/search.dart';
 import 'package:demo_fx_project/service/api_client.dart';
 import 'package:demo_fx_project/service/stock_service.dart';
+import 'package:demo_fx_project/service/user_setting_service.dart';
 import 'package:demo_fx_project/util/theme_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -69,6 +70,7 @@ class _AppState extends State<App> {
         // Dependency injection for core component
         Provider<ApiClient>(create: (_) => DioApiClient()),
         Provider<StockService>(create: (context) => StockService(context.read<ApiClient>())),
+        ListenableProvider<UserSettingService>(create: (context) => UserSettingService()..fetch())
       ],
       child: MaterialApp.router(
         routerConfig: _router,
