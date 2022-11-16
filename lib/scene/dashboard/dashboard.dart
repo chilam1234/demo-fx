@@ -1,3 +1,4 @@
+import 'package:demo_fx_project/service/user_setting_service.dart';
 import 'package:go_router/go_router.dart';
 
 import 'dashboard_provider.dart';
@@ -35,14 +36,21 @@ class Dashboard extends StatelessWidget {
             )
           ],
         ),
-        body: const _DashboardContent(),
+        body: Consumer<UserSettingService>(
+          builder: (_, userSetting, child) {
+            return _DashboardContent(watchingInstrument: userSetting.watchingInstrument);
+          },
+        ),
       ),
     );
   }
 }
 
 class _DashboardContent extends StatefulWidget {
-  const _DashboardContent({Key? key}) : super(key: key);
+  final List<String>? watchingInstrument;
+
+  const _DashboardContent({Key? key, this.watchingInstrument})
+      : super(key: key);
 
   @override
   State<_DashboardContent> createState() => _DashboardContentState();
@@ -51,29 +59,54 @@ class _DashboardContent extends StatefulWidget {
 class _DashboardContentState extends State<_DashboardContent> {
   List<Widget> _buildGainerLoserList(BuildContext context) {
     final provider = context.watch<DashboardProvider>();
-    return provider.watchList
-        .map((instrument) => TopInstrumentItem(instrument: instrument))
-        .toList();
+    final topList = provider.watchList;
+    if (topList.isEmpty) {
+      return [const Text('You watch list is empty')];
+    } else {
+      return topList
+          .map((instrument) => TopInstrumentItem(instrument: instrument))
+          .toList();
+    }
   }
 
   List<Widget> _buildWatchList(BuildContext context) {
     final provider = context.watch<DashboardProvider>();
-    return provider.watchList
-        .map((instrument) => WatchListItem(instrument: instrument))
-        .toList();
+    final watchList = provider.watchList;
+
+    if (watchList.isEmpty) {
+      return [const Text('You watch list is empty')];
+    } else {
+      return provider.watchList
+          .map((instrument) => WatchListItem(instrument: instrument))
+          .toList();
+    }
   }
 
   @override
   void initState() {
-    final provider = context.read<DashboardProvider>();
-    provider.fetchInstrument('TSLA'); // TODO: Hardcode for testing
     super.initState();
+    _fetchInstrument();
+  }
+
+  @override
+  void didUpdateWidget(covariant _DashboardContent oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.watchingInstrument != widget.watchingInstrument) {
+       _fetchInstrument();
+    }
+  }
+
+  void _fetchInstrument() {
+    final watchingInstrument = widget.watchingInstrument;
+    if (watchingInstrument != null && watchingInstrument.isNotEmpty) {
+      final provider = context.read<DashboardProvider>();
+      provider.fetchInstruments(watchingInstrument);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final headerTextStyle = Theme
-        .of(context)
+    final headerTextStyle = Theme.of(context)
         .textTheme
         .titleMedium
         ?.apply(fontWeightDelta: 4, fontSizeDelta: 2);

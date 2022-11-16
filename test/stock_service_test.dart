@@ -20,7 +20,7 @@ void main() {
     final stockService = StockService(mockAPIClient);
     final response = await stockService.getTimeSeries('IBM');
 
-    expect(response.sublist(0, 3), [
+    expect(response?.sublist(0, 3), [
       Candlestick(
         time: DateTime(2022, 11, 11, 19, 20, 00),
         open: 143.24,

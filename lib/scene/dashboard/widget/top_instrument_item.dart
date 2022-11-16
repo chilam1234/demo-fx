@@ -32,12 +32,12 @@ class TopInstrumentItem extends StatelessWidget {
                     ?.merge(const TextStyle(fontWeight: FontWeight.bold)),
               ),
               Text(
-                '\$${instrument.price}',
+                '\$${instrument.price?.toString() ?? '--'}',
                 style: theme.textTheme.bodyMedium
                     ?.merge(const TextStyle(fontWeight: FontWeight.w500)),
               ),
               const Spacer(),
-              GainLossView(pricePercentageChange: instrument.priceChange ?? 0),
+              GainLossView(pricePercentageChange: instrument.priceChange),
             ],
             crossAxisAlignment: CrossAxisAlignment.start,
           ),

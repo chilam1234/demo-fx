@@ -16,6 +16,10 @@ class WatchListItem extends StatelessWidget {
     const titleTextStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 16);
     const priceTextStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 14);
 
+    String priceText = '--';
+    if (instrument.price != null) {
+      priceText = '\$${instrument.price}';
+    }
     return Card(
       child: SizedBox(
         height: 64,
@@ -35,12 +39,12 @@ class WatchListItem extends StatelessWidget {
                     style: titleTextStyle,
                   ),
                   const SizedBox(height: 2),
-                  GainLossView(pricePercentageChange: instrument.priceChange ?? 0),
+                  GainLossView(pricePercentageChange: instrument.priceChange),
                 ],
               ),
               const Spacer(),
               Text(
-                '\$${instrument.price}',
+                priceText,
                 style: priceTextStyle,
               )
             ],

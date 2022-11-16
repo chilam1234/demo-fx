@@ -1,4 +1,3 @@
-import 'package:demo_fx_project/model/instrument.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,7 +12,7 @@ class UserSettingService extends ChangeNotifier {
   }
 
   void watchInstrument(String instrumentName) async {
-    var watchingInstrument = this.watchingInstrument;
+    var watchingInstrument = List.of(this.watchingInstrument); // Use same reference will let _DashboardContentState think here is no change, so need copy a new reference
     if (watchingInstrument.contains(instrumentName)) {
       return;
     }
@@ -21,15 +20,19 @@ class UserSettingService extends ChangeNotifier {
     watchingInstrument.add(instrumentName);
     final pref = await SharedPreferences.getInstance();
     pref.setStringList(keyWatchInstrument, watchingInstrument);
+
+    this.watchingInstrument = List.unmodifiable(watchingInstrument);
     notifyListeners();
   }
 
   void unwatchInstrument(String instrumentName) async {
-    var watchingInstrument = this.watchingInstrument;
+    var watchingInstrument = List.of(this.watchingInstrument);
 
     watchingInstrument.removeWhere((i) => i == instrumentName);
     final pref = await SharedPreferences.getInstance();
     pref.setStringList(keyWatchInstrument, watchingInstrument);
+
+    this.watchingInstrument = List.unmodifiable(watchingInstrument);
     notifyListeners();
   }
 }

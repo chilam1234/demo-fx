@@ -121,9 +121,9 @@ class _SearchInstrumentListItem extends StatelessWidget {
                   onPressed: () {
                     final userSettingUserService = context.read<UserSettingService>();
                     if (isFollowing) {
-                      userSettingUserService.unwatchInstrument(item.name);
+                      userSettingUserService.unwatchInstrument(item.symbol);
                     } else {
-                      userSettingUserService.watchInstrument(item.name);
+                      userSettingUserService.watchInstrument(item.symbol);
                     }
                   },
                   child: Text(isFollowing ? 'Unfollow' : 'Follow'),
@@ -133,8 +133,7 @@ class _SearchInstrumentListItem extends StatelessWidget {
                 );
               },
               selector: (_, userSettingService) =>
-                  userSettingService.watchingInstrument.contains(item.name) ??
-                  false,
+                  userSettingService.watchingInstrument.contains(item.symbol),
             )
           ],
         ),

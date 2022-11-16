@@ -67,7 +67,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 onTap: _onTabSelected,
               ),
             );
-            ;
           } else {
             return const LoginScreen();
           }

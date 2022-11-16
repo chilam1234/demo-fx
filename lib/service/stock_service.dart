@@ -1,4 +1,5 @@
 import 'package:demo_fx_project/model/candlestick.dart';
+import 'package:demo_fx_project/model/instrument.dart';
 import 'package:demo_fx_project/model/search_result.dart';
 import 'package:demo_fx_project/service/api_client.dart';
 
@@ -9,7 +10,7 @@ class StockService {
 
   StockService(this._apiClient);
 
-  Future<List<Candlestick>> getTimeSeries(String symbol) async {
+  Future<List<Candlestick>?> getTimeSeries(String symbol) async {
     final Map<String, dynamic> response = await _apiClient.get(
       '$_serviceRoot/query',
       queryParameters: {
@@ -19,10 +20,40 @@ class StockService {
         'apikey': _apiKey
       },
     );
+    try {
+      final timeSeriesKey =
+          response.keys.firstWhere((k) => k.startsWith('Time Series'));
+      return _parseResponse(response[timeSeriesKey]);
+    } catch (error) {
+      print(
+          'Unable to get time series for $symbol: $error, rawResponse $response');
+      return null;
+    }
+  }
 
-    final timeSeriesKey =
-        response.keys.firstWhere((k) => k.startsWith('Time Series'));
-    return _parseResponse(response[timeSeriesKey]);
+  Future<Instrument> getQuote(String symbol) async {
+    final Map<String, dynamic> response = await _apiClient.get(
+      '$_serviceRoot/query',
+      queryParameters: {
+        'function': 'GLOBAL_QUOTE',
+        'symbol': symbol,
+        'apikey': _apiKey
+      },
+    );
+    try {
+      final data = response['Global Quote'];
+      var priceChangeString = data['10. change percent'] as String;
+      priceChangeString = priceChangeString.replaceAll('%', '');
+      var priceChangePercent = num.tryParse(priceChangeString);
+      return Instrument(
+          name: data['01. symbol'],
+          price: num.tryParse(data['08. previous close']),
+          priceChange: priceChangePercent);
+    } catch (error) {
+      print(
+          'Unable to get instrument for $symbol: $error, rawResponse $response');
+      return Instrument(name: symbol, price: null, priceChange: null);
+    }
   }
 
   Future<List<SearchResult>> search(String keyword) async {
