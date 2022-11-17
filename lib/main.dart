@@ -4,6 +4,7 @@ import 'package:demo_fx_project/service/api_client.dart';
 import 'package:demo_fx_project/service/stock_service.dart';
 import 'package:demo_fx_project/service/user_setting_service.dart';
 import 'package:demo_fx_project/util/theme_extension.dart';
+import 'package:firebase_phone_auth_handler/firebase_phone_auth_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:go_router/go_router.dart';
@@ -69,13 +70,16 @@ class _AppState extends State<App> {
       providers: [
         // Dependency injection for core component
         Provider<ApiClient>(create: (_) => DioApiClient()),
-        Provider<StockService>(create: (context) => StockService(context.read<ApiClient>())),
-        ListenableProvider<UserSettingService>(create: (context) => UserSettingService()..fetch())
+        Provider<StockService>(
+            create: (context) => StockService(context.read<ApiClient>())),
+        ListenableProvider<UserSettingService>(
+            create: (context) => UserSettingService()..fetch()),
       ],
-      child: MaterialApp.router(
+      child: FirebasePhoneAuthProvider(
+          child: MaterialApp.router(
         routerConfig: _router,
         theme: defaultTheme,
-      ),
+      )),
     );
   }
 }
