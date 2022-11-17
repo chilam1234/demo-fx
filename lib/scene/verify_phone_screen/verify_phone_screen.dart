@@ -66,7 +66,7 @@ class _VerifyPhoneNumberScreenState extends State<VerifyPhoneNumberScreen>
   Widget build(BuildContext context) {
     return SafeArea(
       child: FirebasePhoneAuthHandler(
-        phoneNumber: "+85295223576",
+        phoneNumber: widget.phoneNumber,
         signOutOnSuccessfulVerification: false,
         linkWithExistingUser: false,
         autoRetrievalTimeOutDuration: const Duration(seconds: 60),
@@ -153,13 +153,13 @@ class _VerifyPhoneNumberScreenState extends State<VerifyPhoneNumberScreen>
                 ? Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const [
-                      Loader(),
-                      SizedBox(height: 50),
+                    children: [
+                      const Loader(),
+                      const SizedBox(height: 50),
                       Center(
                         child: Text(
-                          'Sending OTP',
-                          style: TextStyle(fontSize: 25),
+                          'Sending OTP to ${widget.phoneNumber}',
+                          style: const TextStyle(fontSize: 25),
                         ),
                       ),
                     ],

@@ -1,5 +1,6 @@
 import 'package:demo_fx_project/scene/home/home.dart';
 import 'package:demo_fx_project/scene/search/search.dart';
+import 'package:demo_fx_project/scene/verify_phone_screen/verify_phone_screen.dart';
 import 'package:demo_fx_project/service/api_client.dart';
 import 'package:demo_fx_project/service/stock_service.dart';
 import 'package:demo_fx_project/service/user_setting_service.dart';
@@ -27,8 +28,16 @@ class _AppState extends State<App> {
   final GoRouter _router = GoRouter(routes: <GoRoute>[
     GoRoute(path: '/', builder: (context, state) => const Home()),
     GoRoute(
+      name: 'search',
       path: '/search',
       builder: (context, state) => const SearchInstrument(),
+    ),
+    GoRoute(
+      name: 'verifySms',
+      path: '/sms/verify/:phoneNumber',
+      builder: (context, state) => VerifyPhoneNumberScreen(
+        phoneNumber: state.params['phoneNumber'] ?? '',
+      ),
     ),
   ]);
 

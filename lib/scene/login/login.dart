@@ -1,6 +1,7 @@
 import 'package:demo_fx_project/scene/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:intl_phone_field/phone_number.dart';
 
@@ -16,6 +17,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   String phoneNumber = "";
+
   @override
   Widget build(BuildContext context) {
     AuthService().signOut();
@@ -42,11 +44,17 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             Flexible(
               child: LoginButton(
-                  icon: FontAwesomeIcons.userNinja,
-                  text: 'Continue as Guest',
-                  loginMethod: AuthService().anonLogin,
-                  color: Colors.deepPurple,
-                  phoneNumber: phoneNumber),
+                icon: FontAwesomeIcons.userNinja,
+                text: 'Continue as Guest',
+                loginMethod: AuthService().anonLogin,
+                color: Colors.deepPurple,
+                onPressed: () {
+                  GoRouter.of(context).goNamed(
+                    'verifySms',
+                    params: {'phoneNumber': phoneNumber},
+                  );
+                },
+              ),
             )
           ],
         ),
@@ -60,7 +68,7 @@ class LoginButton extends StatelessWidget {
   final IconData icon;
   final String text;
   final Function loginMethod;
-  final String phoneNumber;
+  final VoidCallback? onPressed;
 
   LoginButton({
     super.key,
@@ -68,7 +76,7 @@ class LoginButton extends StatelessWidget {
     required this.icon,
     required this.color,
     required this.loginMethod,
-    this.phoneNumber = "",
+    required this.onPressed,
   });
 
   @override
@@ -85,14 +93,7 @@ class LoginButton extends StatelessWidget {
           padding: const EdgeInsets.all(24),
           backgroundColor: color,
         ),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    const VerifyPhoneNumberScreen(phoneNumber: "+85295223576")),
-          );
-        },
+        onPressed: onPressed,
         label: Text(text, textAlign: TextAlign.center),
       ),
     );
