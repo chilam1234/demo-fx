@@ -9,7 +9,16 @@ class DashboardProvider extends ChangeNotifier {
 
   List<Instrument> watchList = [];
 
-  void fetchInstruments(List<String> symbols) async {
+  void fetchInstruments(List<String>? symbols) async {
+    if (symbols == null) {
+      watchList = [];
+      notifyListeners();
+      return;
+    } else {
+      watchList = symbols.map((symbols) => Instrument(name: symbols)).toList();
+      notifyListeners();
+    }
+
     final batchRequest = symbols.map((symbol) => _stockService.getQuote(symbol));
     print('fetching instruments $symbols');
 

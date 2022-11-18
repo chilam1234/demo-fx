@@ -97,11 +97,10 @@ class _DashboardContentState extends State<_DashboardContent> {
   }
 
   void _fetchInstrument() {
-    final watchingInstrument = widget.watchingInstrument;
-    if (watchingInstrument != null && watchingInstrument.isNotEmpty) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final provider = context.read<DashboardProvider>();
-      provider.fetchInstruments(watchingInstrument);
-    }
+      provider.fetchInstruments(widget.watchingInstrument);
+    });
   }
 
   @override
