@@ -149,78 +149,78 @@ class _VerifyPhoneNumberScreenState extends State<VerifyPhoneNumberScreen>
                 const SizedBox(width: 5),
               ],
             ),
-            body: controller.isSendingCode
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const Loader(),
-                      const SizedBox(height: 50),
-                      Center(
-                        child: Text(
-                          'Sending OTP to ${widget.phoneNumber}',
-                          style: const TextStyle(fontSize: 25),
-                        ),
-                      ),
-                    ],
-                  )
-                : ListView(
-                    padding: const EdgeInsets.all(20),
-                    controller: scrollController,
-                    children: [
+            body: ListView(
+              padding: const EdgeInsets.all(20),
+              controller: scrollController,
+              children: [
+                Text(
+                  "We've sent an SMS with a verification code to ${widget.phoneNumber}",
+                  style: const TextStyle(fontSize: 25),
+                ),
+                const SizedBox(height: 10),
+                const Divider(),
+                if (controller.isListeningForOtpAutoRetrieve)
+                  Column(
+                    children: const [
+                      Loader(),
+                      SizedBox(height: 50),
                       Text(
-                        "We've sent an SMS with a verification code to ${widget.phoneNumber}",
-                        style: const TextStyle(fontSize: 25),
-                      ),
-                      const SizedBox(height: 10),
-                      const Divider(),
-                      if (controller.isListeningForOtpAutoRetrieve)
-                        Column(
-                          children: const [
-                            Loader(),
-                            SizedBox(height: 50),
-                            Text(
-                              'Listening for OTP',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 25,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            SizedBox(height: 15),
-                            Divider(),
-                            Text('OR', textAlign: TextAlign.center),
-                            Divider(),
-                          ],
-                        ),
-                      const SizedBox(height: 15),
-                      const Text(
-                        'Enter OTP',
+                        'Listening for OTP',
+                        textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 25,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      const SizedBox(height: 15),
-                      PinInputField(
-                        length: 6,
-                        onFocusChange: (hasFocus) async {
-                          if (hasFocus) await _scrollToBottomOnKeyboardOpen();
-                        },
-                        onSubmit: (enteredOtp) async {
-                          final verified =
-                              await controller.verifyOtp(enteredOtp);
-                          if (verified) {
-                            // number verify success
-                            // will call onLoginSuccess handler
-                          } else {
-                            // phone verification failed
-                            // will call onLoginFailed or onError callbacks with the error
-                          }
-                        },
-                      ),
+                      SizedBox(height: 15),
+                      Divider(),
+                      Text('OR', textAlign: TextAlign.center),
+                      Divider(),
                     ],
                   ),
+                const SizedBox(height: 15),
+                const Text(
+                  'Enter OTP',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 15),
+                PinInputField(
+                  length: 6,
+                  onFocusChange: (hasFocus) async {
+                    if (hasFocus) await _scrollToBottomOnKeyboardOpen();
+                  },
+                  onSubmit: (enteredOtp) async {
+                    debugPrint(enteredOtp);
+                    FirebaseAuth auth = FirebaseAuth.instance;
+                    await auth.verifyPhoneNumber(
+                      phoneNumber: "+852 2222 2222",
+                      verificationCompleted:
+                          (PhoneAuthCredential credential) {},
+                      verificationFailed: (FirebaseAuthException e) {},
+                      codeSent:
+                          (String verificationId, int? resendToken) async {
+                        debugPrint(verificationId.toString());
+                        // Create a PhoneAuthCredential with the code
+                        PhoneAuthCredential credential =
+                            PhoneAuthProvider.credential(
+                                verificationId: verificationId,
+                                smsCode: enteredOtp);
+                        debugPrint(credential.toString());
+
+                        // Sign the user in (or link) with the credential
+                        await auth.signInWithCredential(credential);
+                      },
+                      codeAutoRetrievalTimeout: (String verificationId) {
+                        debugPrint(verificationId);
+                      },
+                    );
+                  },
+                ),
+              ],
+            ),
           );
         },
       ),
