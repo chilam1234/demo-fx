@@ -1,6 +1,8 @@
 import 'package:demo_fx_project/scene/verify_phone_screen/pin_input_field.dart';
+import 'package:demo_fx_project/service/auth.dart';
 import 'package:firebase_phone_auth_handler/firebase_phone_auth_handler.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../shared_widget/loading.dart';
 import '../../util/helper.dart';
@@ -195,28 +197,32 @@ class _VerifyPhoneNumberScreenState extends State<VerifyPhoneNumberScreen>
                   onSubmit: (enteredOtp) async {
                     debugPrint(enteredOtp);
                     FirebaseAuth auth = FirebaseAuth.instance;
-                    await auth.verifyPhoneNumber(
-                      phoneNumber: "+852 2222 2222",
-                      verificationCompleted:
-                          (PhoneAuthCredential credential) {},
-                      verificationFailed: (FirebaseAuthException e) {},
-                      codeSent:
-                          (String verificationId, int? resendToken) async {
-                        debugPrint(verificationId.toString());
-                        // Create a PhoneAuthCredential with the code
-                        PhoneAuthCredential credential =
-                            PhoneAuthProvider.credential(
-                                verificationId: verificationId,
-                                smsCode: enteredOtp);
-                        debugPrint(credential.toString());
-
-                        // Sign the user in (or link) with the credential
-                        await auth.signInWithCredential(credential);
-                      },
-                      codeAutoRetrievalTimeout: (String verificationId) {
-                        debugPrint(verificationId);
-                      },
+                    await AuthService().anonLogin();
+                    GoRouter.of(context).go(
+                      '/',
                     );
+                    // await auth.verifyPhoneNumber(
+                    //   phoneNumber: "+852 2222 2222",
+                    //   verificationCompleted:
+                    //       (PhoneAuthCredential credential) {},
+                    //   verificationFailed: (FirebaseAuthException e) {},
+                    //   codeSent:
+                    //       (String verificationId, int? resendToken) async {
+                    //     debugPrint(verificationId.toString());
+                    //     // Create a PhoneAuthCredential with the code
+                    //     PhoneAuthCredential credential =
+                    //         PhoneAuthProvider.credential(
+                    //             verificationId: verificationId,
+                    //             smsCode: enteredOtp);
+                    //     debugPrint(credential.toString());
+
+                    //     // Sign the user in (or link) with the credential
+                    //     //await auth.signInWithCredential(credential);
+                    //   },
+                    //   codeAutoRetrievalTimeout: (String verificationId) {
+                    //     debugPrint(verificationId);
+                    //   },
+                    // );
                   },
                 ),
               ],

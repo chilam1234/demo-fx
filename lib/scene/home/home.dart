@@ -27,7 +27,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     _TabContent(
         tabName: 'Dashboard', child: Dashboard(), icon: Icon(Icons.home)),
     _TabContent(
-        tabName: 'Portfolio', child: Portfolio(), icon: Icon(Icons.person))
+        tabName: 'Portfolio', child: Portfolio(), icon: Icon(Icons.person)),
   ];
 
   int _selectedIndex = 0;
@@ -40,21 +40,36 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: homeTab.map((tab) => tab.child).toList(growable: false),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: homeTab
-            .map((tab) => BottomNavigationBarItem(
-          icon: tab.icon,
-          label: tab.tabName,
-        ))
-            .toList(growable: false),
-        currentIndex: _selectedIndex,
-        onTap: _onTabSelected,
-      ),
-    );
+    return StreamBuilder(
+        stream: AuthService().userStream,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const LoadingScreen();
+          } else if (snapshot.hasError) {
+            return const Center(
+              child: ErrorMessage(),
+            );
+          } else if (snapshot.hasData) {
+            return Scaffold(
+              body: IndexedStack(
+                index: _selectedIndex,
+                children:
+                    homeTab.map((tab) => tab.child).toList(growable: false),
+              ),
+              bottomNavigationBar: BottomNavigationBar(
+                items: homeTab
+                    .map((tab) => BottomNavigationBarItem(
+                          icon: tab.icon,
+                          label: tab.tabName,
+                        ))
+                    .toList(growable: false),
+                currentIndex: _selectedIndex,
+                onTap: _onTabSelected,
+              ),
+            );
+          } else {
+            return const LoginScreen();
+          }
+        });
   }
 }
