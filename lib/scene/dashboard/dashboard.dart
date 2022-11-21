@@ -37,9 +37,9 @@ class Dashboard extends StatelessWidget {
           ],
         ),
         body: Consumer<UserSettingService>(
-          builder: (_, userSetting, child) {
-            return _DashboardContent(watchingInstrument: userSetting.watchingInstrument);
-          },
+          builder: (_, userSetting, child) => _DashboardContent(
+            watchingInstrument: userSetting.watchingInstrument,
+          ),
         ),
       ),
     );
@@ -77,7 +77,16 @@ class _DashboardContentState extends State<_DashboardContent> {
       return [const Text('You watch list is empty')];
     } else {
       return provider.watchList
-          .map((instrument) => WatchListItem(instrument: instrument))
+          .map(
+            (instrument) => WatchListItem(
+              instrument: instrument,
+              onClick: () {
+                GoRouter.of(context).pushNamed('instrumentDetail',
+                    params: {'instrumentName': instrument.name},
+                    extra: instrument);
+              },
+            ),
+          )
           .toList();
     }
   }
@@ -92,7 +101,7 @@ class _DashboardContentState extends State<_DashboardContent> {
   void didUpdateWidget(covariant _DashboardContent oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.watchingInstrument != widget.watchingInstrument) {
-       _fetchInstrument();
+      _fetchInstrument();
     }
   }
 

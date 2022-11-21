@@ -9,10 +9,12 @@ enum WatchListItemMenu { remove }
 
 class WatchListItem extends StatelessWidget {
   final Instrument instrument;
+  final VoidCallback? onClick;
 
   const WatchListItem({
     Key? key,
     required this.instrument,
+    this.onClick
   }) : super(key: key);
 
   @override
@@ -28,6 +30,7 @@ class WatchListItem extends StatelessWidget {
       child: SizedBox(
         height: 64,
         child: ListTile(
+          onTap: onClick,
           leading: InstrumentIcon(
             name: instrument.name,
             size: 32,

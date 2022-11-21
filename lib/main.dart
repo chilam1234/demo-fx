@@ -1,5 +1,6 @@
+import 'package:demo_fx_project/model/instrument.dart';
 import 'package:demo_fx_project/scene/auth/auth.dart';
-import 'package:demo_fx_project/scene/home/home.dart';
+import 'package:demo_fx_project/scene/instrument/instrument_screen.dart';
 import 'package:demo_fx_project/scene/search/search.dart';
 import 'package:demo_fx_project/scene/verify_phone_screen/verify_phone_screen.dart';
 import 'package:demo_fx_project/service/api_client.dart';
@@ -41,6 +42,21 @@ class _AppState extends State<App> {
         phoneNumber: state.params['phoneNumber'] ?? '',
       ),
     ),
+    GoRoute(
+        path: '/instrument/:instrumentName',
+        name: 'instrumentDetail',
+        builder: (context, state) {
+          Instrument? instrument;
+          var extra = state.extra;
+          if (extra is Instrument) {
+            instrument = extra;
+          } else {
+            instrument = Instrument(name: state.params['instrumentName'] ?? '');
+          }
+          return InstrumentScreen(
+            instrument: instrument,
+          );
+        }),
   ]);
 
   final defaultTheme = ThemeData(

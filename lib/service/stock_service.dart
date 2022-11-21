@@ -16,7 +16,7 @@ class StockService {
       queryParameters: {
         'function': 'TIME_SERIES_INTRADAY',
         'symbol': symbol,
-        'interval': '5min',
+        'interval': '60min',
         'apikey': _apiKey
       },
     );
@@ -65,8 +65,14 @@ class StockService {
         'apikey': _apiKey,
       },
     );
-    final result = response['bestMatches'] as List;
-    return result.map((i) => SearchResult.fromJson(i)).toList();
+    try {
+      final result = response['bestMatches'] as List;
+      return result.map((i) => SearchResult.fromJson(i)).toList();
+    } catch (error) {
+      print(
+          'Unable to get search result: $error, rawResponse $response');
+      return List.empty();
+    }
   }
 
   num _parseNumber(Map<String, dynamic> candlestickMap, String field) {
@@ -79,7 +85,7 @@ class StockService {
   }
 
   List<Candlestick> _parseResponse(Map<String, dynamic> jsonResponse) {
-    final result = jsonResponse.entries.map((entity) {
+    var result = jsonResponse.entries.map((entity) {
       final time = DateTime.parse(entity.key);
 
       final candlestickMap = entity.value;
@@ -97,8 +103,9 @@ class StockService {
         close: close,
         volume: volume,
       );
-    });
+    }).toList();
 
-    return result.toList();
+    result.sort((a, b) => a.time.compareTo(b.time));
+    return result;
   }
 }
