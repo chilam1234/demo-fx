@@ -1,9 +1,10 @@
 import 'package:demo_fx_project/model/candlestick.dart';
-import 'package:demo_fx_project/util/theme_extension.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class StockChart extends StatelessWidget {
+  static final NumberFormat priceFormat = NumberFormat.compact();
   const StockChart({Key? key, required this.candleStick, this.tintColor = Colors.grey}) : super(key: key);
   static const TextStyle axisTextStyle = TextStyle(fontSize: 12);
 
@@ -33,7 +34,6 @@ class StockChart extends StatelessWidget {
   Widget _getDateTitleWidget(double value, TitleMeta meta) {
     final date = candleStick[value.toInt()].time;
     final label = '${date.hour}:00';
-    print(date);
     return SideTitleWidget(
       child: Text(label, style: axisTextStyle),
       axisSide: meta.axisSide,
@@ -42,7 +42,7 @@ class StockChart extends StatelessWidget {
 
   Widget _getLeftTitleWidget(double value, TitleMeta meta) {
     return SideTitleWidget(
-      child: Text(value.toString(), style: axisTextStyle),
+      child: Text(priceFormat.format(value), style: axisTextStyle),
       axisSide: meta.axisSide,
     );
   }
@@ -67,7 +67,7 @@ class StockChart extends StatelessWidget {
           rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
           leftTitles: AxisTitles(
             sideTitles: SideTitles(
-              reservedSize: 60,
+              reservedSize: 40,
               showTitles: true,
               getTitlesWidget: _getLeftTitleWidget,
             ),

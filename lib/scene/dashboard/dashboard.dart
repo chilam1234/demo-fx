@@ -64,7 +64,16 @@ class _DashboardContentState extends State<_DashboardContent> {
       return [const Text('You watch list is empty')];
     } else {
       return topList
-          .map((instrument) => TopInstrumentItem(instrument: instrument))
+          .map(
+            (instrument) => TopInstrumentItem(
+              instrument: instrument,
+              onClick: () {
+                GoRouter.of(context).pushNamed('instrumentDetail',
+                    params: {'instrumentName': instrument.name},
+                    extra: instrument);
+              },
+            ),
+          )
           .toList();
     }
   }

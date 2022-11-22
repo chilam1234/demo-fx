@@ -10,8 +10,7 @@ class InstrumentNewFeedItem extends StatelessWidget {
 
   Widget _buildImage(BuildContext context) {
     final url = newsFeed.bannerImage;
-
-    if (url != null) {
+    if (url != null && url.isNotEmpty) {
       return Image.network(url);
     } else {
       return Container();

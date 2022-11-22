@@ -124,14 +124,27 @@ class InstrumentScreenContent extends StatelessWidget {
   }
 
   List<Widget> _buildNewsFeedList(
-      BuildContext context, InstrumentScreenProvider provider) {
+    BuildContext context,
+    InstrumentScreenProvider provider,
+  ) {
     final news = provider.news;
+    final theme = Theme.of(context);
 
     if (news != null) {
       return news.map((news) => InstrumentNewFeedItem(newsFeed: news)).toList();
     } else if (provider.isFetchError) {
-      return const [
-        Text('Something get wrong when fetching news, please try again later')
+      return [
+        Text(
+          'Something get wrong when fetching news',
+          style: theme.textTheme.caption
+              ?.apply(color: Colors.grey, fontSizeDelta: 3),
+        ),
+        TextButton(
+          onPressed: () {
+            provider.refresh();
+          },
+          child: const Text('Retry'),
+        )
       ];
     } else {
       return const [Text('No news available')];
