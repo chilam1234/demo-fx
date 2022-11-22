@@ -1,5 +1,6 @@
 import 'package:demo_fx_project/model/candlestick.dart';
 import 'package:demo_fx_project/model/instrument.dart';
+import 'package:demo_fx_project/model/news_feed.dart';
 import 'package:demo_fx_project/model/search_result.dart';
 import 'package:demo_fx_project/service/api_client.dart';
 
@@ -72,6 +73,25 @@ class StockService {
       print(
           'Unable to get search result: $error, rawResponse $response');
       return List.empty();
+    }
+  }
+
+  Future<List<NewsFeed>?> getNewsFeed(String symbol) async {
+    final response = await _apiClient.get(
+        '$_serviceRoot/query',
+        queryParameters: {
+          'function': 'NEWS_SENTIMENT',
+          'tickers': symbol,
+          'apikey': _apiKey,
+    });
+
+    try {
+      final result = response['feed'] as List;
+      return result.map((i) => NewsFeed.fromJson(i)).toList();
+    } catch (error) {
+      print(
+          'Unable to get news feed result: $error, rawResponse $response');
+      return null;
     }
   }
 

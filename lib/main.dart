@@ -66,6 +66,12 @@ class _AppState extends State<App> {
         loss: Color(0xFFDE5A74),
       ),
     ],
+    textTheme: const TextTheme(
+      titleLarge: TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 22,
+      ),
+    ),
     appBarTheme: const AppBarTheme(
       foregroundColor: Colors.black,
       backgroundColor: Colors.white,
