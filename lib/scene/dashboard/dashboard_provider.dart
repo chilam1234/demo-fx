@@ -9,7 +9,7 @@ class DashboardProvider extends ChangeNotifier {
 
   List<Instrument> watchList = [];
 
-  void fetchInstruments(List<String>? symbols) async {
+  Future<void> fetchInstruments(List<String>? symbols) async {
     if (symbols == null) {
       watchList = [];
       notifyListeners();

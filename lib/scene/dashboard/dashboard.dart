@@ -128,30 +128,37 @@ class _DashboardContentState extends State<_DashboardContent> {
         .titleMedium
         ?.apply(fontWeightDelta: 4, fontSizeDelta: 2);
 
-    return ListView(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      children: [
-        ListTile(
-          leading: Text(
-            'Gainers and Losers',
-            style: headerTextStyle,
+    return RefreshIndicator(
+      onRefresh: () async {
+        final provider = context.read<DashboardProvider>();
+        await provider.fetchInstruments(widget.watchingInstrument);
+        return;
+      },
+      child: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        children: [
+          ListTile(
+            leading: Text(
+              'Gainers and Losers',
+              style: headerTextStyle,
+            ),
           ),
-        ),
-        SizedBox(
-          height: 160,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: _buildGainerLoserList(context),
+          SizedBox(
+            height: 160,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: _buildGainerLoserList(context),
+            ),
           ),
-        ),
-        ListTile(
-          leading: Text(
-            'Your watchlist',
-            style: headerTextStyle,
+          ListTile(
+            leading: Text(
+              'Your watchlist',
+              style: headerTextStyle,
+            ),
           ),
-        ),
-        ..._buildWatchList(context)
-      ],
+          ..._buildWatchList(context)
+        ],
+      ),
     );
   }
 }
