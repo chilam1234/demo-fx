@@ -13,6 +13,7 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.5
+  flutter_dotenv: ^5.0.2
   font_awesome_flutter: ^10.2.1
   firebase_core: ^2.2.0
   firebase_phone_auth_handler: ^1.0.7
@@ -48,3 +49,5 @@ flutter:
   #   - assets/
   #   - assets/covers/
   #   - assets/congrats.gif
+assets:
+  - .env
