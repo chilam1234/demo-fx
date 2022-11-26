@@ -22,5 +22,5 @@ samples, guidance on mobile development, and a full API reference.
    [android please see here:](https://firebase.flutter.dev/docs/manual-installation/android)
 3. Provide your vantage endpoint and apikey to .env file
 4. Open your emulator
-   -IOS please type `open Simulator` in terminal 
+   -IOS please type `open -a Simulator.app` in terminal 
 5. Run `flutter run` in the current project folder root

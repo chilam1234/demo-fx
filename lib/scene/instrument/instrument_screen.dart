@@ -47,8 +47,8 @@ class _InstrumentScreenState extends State<InstrumentScreen> {
   @override
   Widget build(BuildContext context) {
     final userSetting = context.watch<UserSettingService>();
-    final instrumentNmae = widget.instrument.name;
-    final isFavourite = userSetting.watchingInstrument.contains(instrumentNmae);
+    final instrumentName = widget.instrument.name;
+    final isFavourite = userSetting.watchingInstrument.contains(instrumentName);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.instrument.name),
@@ -57,8 +57,8 @@ class _InstrumentScreenState extends State<InstrumentScreen> {
           IconButton(
             onPressed: () {
               isFavourite
-                  ? userSetting.unwatchInstrument(instrumentNmae)
-                  : userSetting.watchInstrument(instrumentNmae);
+                  ? userSetting.unwatchInstrument(instrumentName)
+                  : userSetting.watchInstrument(instrumentName);
             },
             icon: Icon(
               Icons.star,
@@ -118,9 +118,8 @@ class InstrumentScreenContent extends StatelessWidget {
           ),
         );
       }
-    } else {
-      return StockChart(candleStick: stockData, tintColor: tintColor);
     }
+    return StockChart(candleStick: stockData, tintColor: tintColor);
   }
 
   List<Widget> _buildNewsFeedList(

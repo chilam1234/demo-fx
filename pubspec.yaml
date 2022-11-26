@@ -49,5 +49,5 @@ flutter:
   #   - assets/
   #   - assets/covers/
   #   - assets/congrats.gif
-assets:
-  - .env
+  assets:
+    - .env
