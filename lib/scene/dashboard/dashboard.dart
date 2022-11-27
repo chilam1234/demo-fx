@@ -1,6 +1,7 @@
 import 'package:demo_fx_project/service/user_setting_service.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../service/auth.dart';
 import 'dashboard_provider.dart';
 import 'package:demo_fx_project/service/stock_service.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,12 @@ class Dashboard extends StatelessWidget {
                 _navigateSearchScene(context);
               },
               icon: const Icon(Icons.search),
+            ),
+            IconButton(
+              onPressed: () {
+                context.read<AuthService>().signOut();
+              },
+              icon: const Icon(Icons.logout),
             )
           ],
         ),

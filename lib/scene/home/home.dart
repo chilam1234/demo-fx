@@ -4,6 +4,7 @@ import '../../shared_widget/error.dart';
 import '../../shared_widget/loading.dart';
 import '../login/login.dart';
 import '../dashboard/dashboard.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -18,6 +19,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     return StreamBuilder(
         stream: AuthService().userStream,
         builder: (context, snapshot) {
+          print(snapshot);
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const LoadingScreen();
           } else if (snapshot.hasError) {
@@ -25,9 +27,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               child: ErrorMessage(),
             );
           } else if (snapshot.hasData) {
-            return const Scaffold(
-              body: Dashboard()
-            );
+            return const Scaffold(body: Dashboard());
           } else {
             return const LoginScreen();
           }

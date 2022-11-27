@@ -15,7 +15,7 @@ class SearchInstrument extends StatefulWidget {
 }
 
 class _SearchInstrumentState extends State<SearchInstrument> {
-  final Debouncer _inputDebouncer = Debouncer(200);
+  final Debouncer _inputDebouncer = Debouncer(500);
   late SearchProvider _searchProvider;
 
   @override
@@ -119,7 +119,8 @@ class _SearchInstrumentListItem extends StatelessWidget {
               builder: (context, isFollowing, child) {
                 return ElevatedButton(
                   onPressed: () {
-                    final userSettingUserService = context.read<UserSettingService>();
+                    final userSettingUserService =
+                        context.read<UserSettingService>();
                     if (isFollowing) {
                       userSettingUserService.unwatchInstrument(item.symbol);
                     } else {
