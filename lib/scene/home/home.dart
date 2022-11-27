@@ -17,7 +17,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: context.read<AuthService>().userStream,
+        stream: AuthService().userStream,
         builder: (context, snapshot) {
           print(snapshot);
           if (snapshot.connectionState == ConnectionState.waiting) {
